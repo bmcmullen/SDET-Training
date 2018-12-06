@@ -96,12 +96,6 @@ public class MapTranslationExHW {
 
 		} catch (IOException e) {
 			System.out.println("Some problem getting a phrase" + e);
-		} finally {
-			// try {
-			// br.close();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
 		}
 
 		return addToMap;
@@ -118,13 +112,7 @@ public class MapTranslationExHW {
 
 		} catch (IOException e) {
 			System.out.println("Some problem getting a phrase" + e);
-		} finally {
-			// try {
-			// br.close();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-		}
+		} 
 
 		return str;
 	}
