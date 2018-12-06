@@ -3,7 +3,6 @@ package com.training.sdet.homework;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,22 +12,35 @@ import java.util.Set;
 public class MapTranslationExHW {
 	public static void main(String[] args) {
 		HashMap<String, String[]> map = null;
+
+		// TODO Instead of setting up from static, should read from a file
+		// TODO Once translations are from a file, updates should be saved there
 		map = setupInitialTranslationMap();
 
-		// Request a string and convert to uppercase for consistent mapKey
-		// lookup
-		String testPhrase = requestString().toUpperCase();
+		// Request a string and convert to upper case for consistent lookup
+		String testPhrase = requestStringForTranslation().toUpperCase();
 
 		while (!testPhrase.equalsIgnoreCase("QUIT")) {
 			String[] translationResults = map.get(testPhrase);
-			System.out.println("For your phrase: " + testPhrase);
-			System.out.print("Translations are: ");
-			for (String t : translationResults) {
-				System.out.print(t + " | ");
+			if (translationResults != null) {
+				System.out.println("Your phrase: " + testPhrase);
+				System.out.print("Translations are: ");
+				for (String t : translationResults) {
+					System.out.print(t + " | ");
+				}
+				System.out.print("\n\nTry Again - ");
+			} else {
+				System.out.print("Your phrase: " + testPhrase + " was not found...\n\n	");
+
+				// Ask user if they want it added to the map and request 3 words
+				if (addToMap()) {
+					// Get the list of translations for testPrase and add to MAP
+					System.out.println("We'll get details now and add your phrase.");
+					String[] translations = { "German", "Spanish", "French" };
+					map.put(testPhrase, translations);
+				}
 			}
-			System.out.print("\n\nTry Again - ");
-			
-			testPhrase = requestString().toUpperCase();
+			testPhrase = requestStringForTranslation().toUpperCase();
 		}
 	}
 
@@ -44,11 +56,11 @@ public class MapTranslationExHW {
 		map.put("EAT", EAT_ARRAY);
 
 		System.out.println("Initial map:");
-		Set s = map.entrySet();
-		Iterator itr = s.iterator();
+		Set<Entry<String, String[]>> s = map.entrySet();
+		Iterator<Entry<String, String[]>> itr = s.iterator();
 		while (itr.hasNext()) {
 			Map.Entry element = (Entry) itr.next();
-			System.out.print("*Phrase: " + element.getKey() + "	");
+			System.out.print("-*- Phrase: " + element.getKey() + " ");
 			String[] translations = (String[]) element.getValue();
 
 			// Study up on these forms... didn't get desired
@@ -56,16 +68,46 @@ public class MapTranslationExHW {
 			// Arrays.asList(element.getValue()).forEach((temp) ->
 			// System.out.print(temp + " |"));
 
-			System.out.print("Translations: ");
+			System.out.print("	Translations: ");
 			for (String t : translations) {
 				System.out.print(t + " | ");
 			}
-			System.out.println("");
+			System.out.println(" ");
 		}
+		System.out.println("\nReady to do some looking up... \n");
+
 		return map;
 	}
 
-	private static String requestString() {
+	private static boolean addToMap() {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		boolean addToMap = false;
+
+		String response = null;
+		try {
+			System.out.println("Would you like to add translations (Y/N):  ");
+			response = br.readLine();
+
+			// Only evaluate the 1st character of the response for an
+			// affirmative
+			if (response.substring(0, 1).equalsIgnoreCase("Y")) {
+				addToMap = true;
+			}
+
+		} catch (IOException e) {
+			System.out.println("Some problem getting a phrase" + e);
+		} finally {
+			// try {
+			// br.close();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+		}
+
+		return addToMap;
+	}
+
+	private static String requestStringForTranslation() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		String str = null;
@@ -76,6 +118,12 @@ public class MapTranslationExHW {
 
 		} catch (IOException e) {
 			System.out.println("Some problem getting a phrase" + e);
+		} finally {
+			// try {
+			// br.close();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
 		}
 
 		return str;
