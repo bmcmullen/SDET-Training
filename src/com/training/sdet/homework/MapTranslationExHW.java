@@ -35,9 +35,13 @@ public class MapTranslationExHW {
 				// Ask user if they want it added to the map and request 3 words
 				if (addToMap()) {
 					// Get the list of translations for testPrase and add to MAP
-					System.out.println("We'll get details now and add your phrase.");
-					String[] translations = { "German", "Spanish", "French" };
+					System.out.println("Please provide the details now and we'll add your translation.");
+					String[] translations = { 
+							requestLanguageTranslation("German"),
+							requestLanguageTranslation("Spanish"),
+							requestLanguageTranslation("French") };
 					map.put(testPhrase, translations);
+					System.out.println("Thanks. You can continue including your new entry.\n\n");
 				}
 			}
 			testPhrase = requestStringForTranslation().toUpperCase();
@@ -88,12 +92,13 @@ public class MapTranslationExHW {
 			System.out.println("Would you like to add translations (Y/N):  ");
 			response = br.readLine();
 
-			// Only evaluate the 1st character of the response for an
-			// affirmative
+			// Only evaluate the 1st character of the response
 			if (response.substring(0, 1).equalsIgnoreCase("Y")) {
 				addToMap = true;
 			}
 
+			
+			
 		} catch (IOException e) {
 			System.out.println("Some problem getting a phrase" + e);
 		}
@@ -101,9 +106,23 @@ public class MapTranslationExHW {
 		return addToMap;
 	}
 
+	private static String requestLanguageTranslation(String language) {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str = null;
+
+		try {
+			System.out.println("Enter a translation for " + language + ":");
+					str = br.readLine();
+
+		} catch (IOException e) {
+			System.out.println("Some problem getting a phrase" + e);
+		} 
+
+		return str;
+	}
+	
 	private static String requestStringForTranslation() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		String str = null;
 
 		try {
